@@ -1,0 +1,18 @@
+services:
+  notnote:
+    build:
+      context: .
+    environment:
+      NODE_ENV: production
+      REDIS_URL: redis://valkey:6379
+    ports:
+      - 3000:3000
+    depends_on:
+      - valkey
+
+  valkey:
+    image: valkey/valkey
+    ports:
+      - 6379:6379
+    volumes:
+      - ./docker/valkey:/data
