@@ -21,12 +21,16 @@
   let isMarkdown = $state($page.url.searchParams.has("md"));
   let theme = $state(defaults.theme);
 
-  const highlighter = $derived.by(() => {
-    const lang = language; // capture it sync so the derived understands the dependency
-    return createHighlighter({
+  const originalHighlighter = $state(
+    createHighlighter({
       themes: [defaults.theme],
       langs: ["markdown"]
-    }).then(async (hl) => {
+    })
+  );
+
+  const highlighter = $derived.by(() => {
+    const lang = language; // capture it sync so the derived understands the dependency
+    return originalHighlighter.then(async (hl) => {
       if (hl.getLoadedLanguages().includes(lang)) {
         return Promise.resolve(hl);
       } else {
